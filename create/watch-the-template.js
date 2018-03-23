@@ -30,8 +30,8 @@ module.exports = function createWatchTheTemplate({
       // eslint-disable-next-line no-console
       console.log(`template updated\nfpath: ${fullPath}`)
       readFile(fullPath)
-        .then(templateStr => {
-          updateRenderer({ templateStr })
+        .then(template => {
+          updateRenderer({ template })
         })
         .catch(handleError)
     })
