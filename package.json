@@ -15,7 +15,7 @@
     "memory-fs": "^0.4.1",
     "pify": "^3.0.0",
     "sane": "^2.5.0",
-    "vue-server-renderer": "^2.5.16"
+    "vue-server-renderer": "github:olsonpm/vue-server-renderer#feature_render-to-object"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
