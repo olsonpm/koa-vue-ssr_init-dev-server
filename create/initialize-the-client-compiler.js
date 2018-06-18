@@ -37,7 +37,7 @@ module.exports = function createInitializeTheClientCompiler({
       )
 
     return koaWebpack(opts).then(koaWebpackMiddleware => {
-      const { dev: webpackDevMiddleware } = koaWebpackMiddleware
+      const { devMiddleware: webpackDevMiddleware } = koaWebpackMiddleware
 
       koaApp.use(koaWebpackMiddleware)
 
@@ -75,12 +75,12 @@ module.exports = function createInitializeTheClientCompiler({
 //------------------//
 
 function getKoaWebpackOpts(compiler, webpackHotClientPort, koaWebpackOptions) {
-  const dev = getValueAtPath(['dev'], koaWebpackOptions),
-    hot = getValueAtPath(['hot'], koaWebpackOptions)
+  const devMiddleware = getValueAtPath(['devMiddleware'], koaWebpackOptions),
+    hotClient = getValueAtPath(['hotClient'], koaWebpackOptions)
 
   return {
     compiler,
-    dev: Object.assign({ serverSideRender: true }, dev),
-    hot: Object.assign({ port: webpackHotClientPort }, hot),
+    devMiddleware: Object.assign({ serverSideRender: true }, devMiddleware),
+    hotClient: Object.assign({ port: webpackHotClientPort }, hotClient),
   }
 }
