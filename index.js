@@ -52,6 +52,8 @@ module.exports = function initDevServer({
         handleError(e)
       }
 
+      return
+
       // scoped helper functions
 
       function handleError(err) {

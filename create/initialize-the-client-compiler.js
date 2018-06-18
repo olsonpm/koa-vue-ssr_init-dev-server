@@ -34,26 +34,28 @@ module.exports = function createInitializeTheClientCompiler({
         clientCompiler,
         webpackHotClientPort,
         koaWebpackOptions
-      ),
-      koaWebpackMiddleware = koaWebpack(opts),
-      { dev: webpackDevMiddleware } = koaWebpackMiddleware
-
-    koaApp.use(koaWebpackMiddleware)
-
-    clientCompiler.plugin('done', stats => {
-      stats = stats.toJson()
-      stats.errors.forEach(logError)
-      stats.warnings.forEach(logError)
-      if (isLaden(stats.errors)) return
-
-      readFileWithFs(
-        webpackDevMiddleware.fileSystem,
-        'vue-ssr-client-manifest.json'
       )
-        .then(manifestContent => {
-          updateRenderer({ clientManifest: JSON.parse(manifestContent) })
-        })
-        .catch(handleError)
+
+    return koaWebpack(opts).then(koaWebpackMiddleware => {
+      const { dev: webpackDevMiddleware } = koaWebpackMiddleware
+
+      koaApp.use(koaWebpackMiddleware)
+
+      clientCompiler.plugin('done', stats => {
+        stats = stats.toJson()
+        stats.errors.forEach(logError)
+        stats.warnings.forEach(logError)
+        if (isLaden(stats.errors)) return
+
+        readFileWithFs(
+          webpackDevMiddleware.fileSystem,
+          'vue-ssr-client-manifest.json'
+        )
+          .then(manifestContent => {
+            updateRenderer({ clientManifest: JSON.parse(manifestContent) })
+          })
+          .catch(handleError)
+      })
     })
   }
 
