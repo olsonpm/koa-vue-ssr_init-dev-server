@@ -20,6 +20,24 @@ const assignDefined = (baseObj, obj) => {
   }, baseObj)
 }
 
+const getValueAtPath = arrayOfKeys => {
+  const allButLastKey = getAllButLast(arrayOfKeys),
+    lastKey = last(arrayOfKeys)
+
+  return anObject => {
+    if (!anObject) return
+
+    for (const key of allButLastKey) {
+      if (anObject[key] === null || typeof anObject[key] !== 'object') {
+        return
+      }
+
+      anObject = anObject[key]
+    }
+    return anObject[lastKey]
+  }
+}
+
 const isLaden = something => {
   return (
     something &&
@@ -42,6 +60,14 @@ const readFile = fpath => pFs.readFile(fpath, 'utf8')
 // Helper Functions //
 //------------------//
 
+function getAllButLast(anArray) {
+  return anArray.slice(0, -1)
+}
+
+function last(anArray) {
+  return anArray[anArray.length - 1]
+}
+
 function mSet(obj, key, val) {
   obj[key] = val
   return obj
@@ -56,4 +82,4 @@ function isDefined(something) {
 // Exports //
 //---------//
 
-module.exports = { assignDefined, isLaden, logError, readFile }
+module.exports = { assignDefined, getValueAtPath, isLaden, logError, readFile }

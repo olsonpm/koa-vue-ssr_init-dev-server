@@ -20,6 +20,7 @@ const { assignDefined, readFile } = require('./utils'),
 
 module.exports = function initDevServer({
   koaApp,
+  koaWebpackOptions,
   webpackConfigs,
   webpackHotClientPort,
   templatePath,
@@ -102,6 +103,7 @@ module.exports = function initDevServer({
         return createInitializeTheClientCompiler({
           handleError,
           koaApp,
+          koaWebpackOptions,
           updateRenderer,
           webpackConfig: webpackConfigs.client,
           webpackHotClientPort,

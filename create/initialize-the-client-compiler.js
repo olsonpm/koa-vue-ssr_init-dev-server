@@ -10,7 +10,7 @@ const koaWebpack = require('koa-webpack'),
   path = require('path'),
   webpack = require('webpack')
 
-const { isLaden, logError } = require('../utils')
+const { getValueAtPath, isLaden, logError } = require('../utils')
 
 //
 //------//
@@ -20,6 +20,7 @@ const { isLaden, logError } = require('../utils')
 module.exports = function createInitializeTheClientCompiler({
   handleError,
   koaApp,
+  koaWebpackOptions,
   updateRenderer,
   webpackConfig,
   webpackHotClientPort,
@@ -29,7 +30,11 @@ module.exports = function createInitializeTheClientCompiler({
     webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin())
 
     const clientCompiler = webpack(webpackConfig),
-      opts = getKoaWebpackOpts(clientCompiler, webpackHotClientPort),
+      opts = getKoaWebpackOpts(
+        clientCompiler,
+        webpackHotClientPort,
+        koaWebpackOptions
+      ),
       koaWebpackMiddleware = koaWebpack(opts),
       { dev: webpackDevMiddleware } = koaWebpackMiddleware
 
@@ -67,10 +72,13 @@ module.exports = function createInitializeTheClientCompiler({
 // Helper Functions //
 //------------------//
 
-function getKoaWebpackOpts(compiler, webpackHotClientPort) {
+function getKoaWebpackOpts(compiler, webpackHotClientPort, koaWebpackOptions) {
+  const dev = getValueAtPath(['dev'], koaWebpackOptions),
+    hot = getValueAtPath(['hot'], koaWebpackOptions)
+
   return {
     compiler,
-    dev: { serverSideRender: true },
-    hot: { port: webpackHotClientPort },
+    dev: Object.assign({ serverSideRender: true }, dev),
+    hot: Object.assign({ port: webpackHotClientPort }, hot),
   }
 }
