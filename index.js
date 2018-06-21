@@ -4,13 +4,14 @@
 // Imports //
 //---------//
 
-const createLruCache = require('lru-cache')
+const createLruCache = require('lru-cache'),
+  dedent = require('dedent')
 
 const createInitializeTheClientCompiler = require('./create/initialize-the-client-compiler'),
   createInitializeTheSsrCompiler = require('./create/initialize-the-ssr-compiler'),
   createWatchTheTemplate = require('./create/watch-the-template')
 
-const { assignDefined, readFile } = require('./utils'),
+const { assignDefined, readFile, reject } = require('./utils'),
   { createBundleRenderer } = require('vue-server-renderer')
 
 //
@@ -19,6 +20,7 @@ const { assignDefined, readFile } = require('./utils'),
 //------//
 
 module.exports = function initDevServer({
+  directives,
   koaApp,
   koaWebpackOptions,
   webpackConfigs,
@@ -26,14 +28,15 @@ module.exports = function initDevServer({
   templatePath,
 }) {
   if (!clientAndSsrOutputPathsAreEqual(webpackConfigs)) {
-    return Promise.reject(
-      new Error(
-        'This module expects the client and ssr webpack configs to contain the' +
-          ' same `output.path` properties.  This assumption simplifies the code.' +
-          '  If your project needs something different then file an issue on' +
-          ' github so I can understand the use-case and work with you toward' +
-          ' a fix.'
-      )
+    return reject(
+      dedent(`
+        This module expects the client and ssr webpack configs to contain the
+          same 'output.path' properties.  This assumption simplifies the code.
+
+        If your project needs something different then file an issue on
+          github so I can understand the use-case and work with you toward
+          a fix.'
+      `)
     )
   }
 
@@ -42,7 +45,7 @@ module.exports = function initDevServer({
       const watchTheTemplate = getWatchTheTemplate(),
         initializeTheClientCompiler = getInitializeTheClientCompiler(),
         initializeTheSsrCompiler = getInitializeTheSsrCompiler(),
-        state = { template }
+        state = { directives, template }
 
       try {
         watchTheTemplate()
@@ -77,6 +80,7 @@ module.exports = function initDevServer({
           state.bundle,
           Object.assign({}, createDefaultRendererOptions(), {
             clientManifest: state.clientManifest,
+            directives: state.directives,
             template: state.template,
           })
         )

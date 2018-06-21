@@ -55,6 +55,8 @@ const logError = err => {
 
 const readFile = fpath => pFs.readFile(fpath, 'utf8')
 
+const reject = message => Promise.reject(new Error(message))
+
 //
 //------------------//
 // Helper Functions //
@@ -82,4 +84,11 @@ function isDefined(something) {
 // Exports //
 //---------//
 
-module.exports = { assignDefined, getValueAtPath, isLaden, logError, readFile }
+module.exports = {
+  assignDefined,
+  getValueAtPath,
+  isLaden,
+  logError,
+  readFile,
+  reject,
+}
