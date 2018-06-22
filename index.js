@@ -24,7 +24,6 @@ module.exports = function initDevServer({
   koaApp,
   koaWebpackOptions,
   webpackConfigs,
-  webpackHotClientPort,
   templatePath,
 }) {
   if (!clientAndSsrOutputPathsAreEqual(webpackConfigs)) {
@@ -112,7 +111,6 @@ module.exports = function initDevServer({
           koaWebpackOptions,
           updateRenderer,
           webpackConfig: webpackConfigs.client,
-          webpackHotClientPort,
         })
       }
 
