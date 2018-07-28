@@ -5,7 +5,7 @@
 //---------//
 
 const createLruCache = require('lru-cache'),
-  dedent = require('dedent')
+  tedent = require('tedent')
 
 const createInitializeTheClientCompiler = require('./create/initialize-the-client-compiler'),
   createInitializeTheSsrCompiler = require('./create/initialize-the-ssr-compiler'),
@@ -28,7 +28,7 @@ module.exports = function initDevServer({
 }) {
   if (!clientAndSsrOutputPathsAreEqual(webpackConfigs)) {
     return reject(
-      dedent(`
+      tedent(`
         This module expects the client and ssr webpack configs to contain the
           same 'output.path' properties.  This assumption simplifies the code.
 

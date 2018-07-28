@@ -10,12 +10,12 @@
   "author": "",
   "license": "SEE LICENSE IN license.txt",
   "dependencies": {
-    "dedent": "^0.7.0",
     "koa-webpack": "^5.0.2",
     "lru-cache": "^4.1.3",
     "memory-fs": "^0.4.1",
     "pify": "^3.0.0",
     "sane": "^2.5.2",
+    "tedent": "github:olsonpm/tedent#0.1.0",
     "vue-server-renderer": "^2.5.16"
   },
   "devDependencies": {
